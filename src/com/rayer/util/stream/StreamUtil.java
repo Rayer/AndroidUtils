@@ -53,7 +53,11 @@ public class StreamUtil {
 	
 
 	public static final void copyInputStream(InputStream in, OutputStream out) throws IOException {
-		byte[] buffer = new byte[1024];
+		copyInputStream(in, out, 1024);
+	}
+	
+	public static final void copyInputStream(InputStream in, OutputStream out, int bufferSize) throws IOException {
+		byte[] buffer = new byte[bufferSize];
 	    int len;
 
 	    while((len = in.read(buffer)) >= 0)
@@ -63,5 +67,10 @@ public class StreamUtil {
 	    out.close();
 	    
 	}
+	
+//	public static File InputStreamToFile(InputStream is, File f) {
+//		FileOutputStream
+//		return null;
+//	}
 
 }

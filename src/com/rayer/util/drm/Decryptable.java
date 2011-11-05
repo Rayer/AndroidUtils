@@ -7,9 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-import com.rayer.util.drm.AESEncryptKeys;
-import com.rayer.util.drm.AESEncrypter;
-
 public abstract class Decryptable {
 	/**
 	 * AES Encrypt specified function.

@@ -12,7 +12,7 @@ import android.util.Log;
 public abstract class InternetResourceProvisionerToFile extends
 		InternetResourceProvisioner<File> {
 	
-	static public boolean DEBUG_MODE = false;
+	static public boolean DEBUG_MODE = true;
 	static public String DEBUG_MODEL_NAME = "InternetResourceProvisionerToFile";
 	static public String DEBUG_TAG = "hamibook2";
 	static public void logD(String message){
@@ -95,19 +95,22 @@ public abstract class InternetResourceProvisionerToFile extends
 			
 			boolean isInterrupted = false;
 			while((len = is.read(buf)) > 0 && isInterrupted == false) {
+
 				fos.write(buf, 0, len);
 				currentDownloaded += len;
 				int percent = (currentDownloaded * 100)/ getTotalLength();
-				if(currentPercentage < percent) {
+				//if(currentPercentage < percent) {
+
 					currentPercentage = percent;
 					if(mListener != null) {
 						isInterrupted = mListener.onCheckInterrupt();
 						if(isInterrupted == false) {
+
 							mListener.onPrePercentDownloaded(currentPercentage, currentDownloaded, getTotalLength());
 							mMonitorListener.onPrePercentDownloaded(currentPercentage, currentDownloaded, getTotalLength());
 						}
 					}
-				}
+				//}
 			}
 			
 			is.close();
