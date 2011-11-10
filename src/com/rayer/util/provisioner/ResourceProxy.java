@@ -4,18 +4,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public abstract class ResourceProxy<T> {
+public abstract class ResourceProxy<T, IndexType> {
 	boolean mForceUpdate = false;
 	
-	ArrayList<ResourceProvisioner<T> > mProvisionerList = new ArrayList<ResourceProvisioner<T> >();
-	ArrayList<ResourceProvisioner<T> > mWaitToWriteList = new ArrayList<ResourceProvisioner<T> >();
+	ArrayList<ResourceProvisioner<T, IndexType> > mProvisionerList = new ArrayList<ResourceProvisioner<T, IndexType> >();
+	ArrayList<ResourceProvisioner<T, IndexType> > mWaitToWriteList = new ArrayList<ResourceProvisioner<T, IndexType> >();
 	/**
 	 * Add a provisioner. The proxy will ORDERLLY try to obtain resource from these provisioners.<br>
 	 * Be careful these provisioner will NOT check its existence before add into the proxy.
 	 * @param provisioner root is ResourceProvisioner<T>. And there is some frequency used provisioner such like FileSystemResourceProvisioner and InternetResourceProvisioner 
 	 * @return now provisioner count. 
 	 */
-	public int addProvisioner(ResourceProvisioner<T> provisioner) {
+	public int addProvisioner(ResourceProvisioner<T, IndexType> provisioner) {
 		if(provisioner != null)
 			mProvisionerList.add(provisioner);
 		return mProvisionerList.size();
@@ -37,12 +37,12 @@ public abstract class ResourceProxy<T> {
 	public T getResource(ResourceProxyListener<T> listener) {
 		mWaitToWriteList.clear();
 		
-		ResourceProvisioner<T> lastProvisioner = mProvisionerList.get(mProvisionerList.size() - 1);
+		ResourceProvisioner<T, IndexType> lastProvisioner = mProvisionerList.get(mProvisionerList.size() - 1);
 		
 		T target = null;
-		Iterator<ResourceProvisioner<T> > itor = mProvisionerList.iterator();
+		Iterator<ResourceProvisioner<T, IndexType> > itor = mProvisionerList.iterator();
 		while(itor.hasNext()) {
-			ResourceProvisioner<T> targetProvisioner = itor.next();
+			ResourceProvisioner<T, IndexType> targetProvisioner = itor.next();
 			//Force Update機制調整 在Force Update下 只會取最後一個Provisioner並且把他寫入前面所有的Provisioner
 			if(mForceUpdate == false || targetProvisioner != lastProvisioner)
 				try {
@@ -55,7 +55,7 @@ public abstract class ResourceProxy<T> {
 				}
 			
 			if(target != null) {
-				for(ResourceProvisioner<T> r : mWaitToWriteList)
+				for(ResourceProvisioner<T, IndexType> r : mWaitToWriteList)
 					r.setResource(getIndentificator(), target);
 				break;
 			}
@@ -81,7 +81,7 @@ public abstract class ResourceProxy<T> {
 		
 	}
 	
-	public abstract String getIndentificator();
+	public abstract IndexType getIndentificator();
 	
 	public interface ResourceProxyListener<T> {
 		void onNotifyCacheAvailible(boolean isCacheAvailible);

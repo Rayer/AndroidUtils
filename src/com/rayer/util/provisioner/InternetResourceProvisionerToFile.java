@@ -9,8 +9,8 @@ import java.io.InputStream;
 
 import android.util.Log;
 
-public abstract class InternetResourceProvisionerToFile extends
-		InternetResourceProvisioner<File> {
+public abstract class InternetResourceProvisionerToFile<IndexType> extends
+		InternetResourceProvisioner<File, IndexType> {
 	
 	static public boolean DEBUG_MODE = true;
 	static public String DEBUG_MODEL_NAME = "InternetResourceProvisionerToFile";
@@ -45,7 +45,7 @@ public abstract class InternetResourceProvisionerToFile extends
 	
 	
 	@Override
-	public File getResource(String identificator){
+	public File getResource(IndexType identificator){
 		File f = null;
 		try {
 			f = super.getResource(identificator);
@@ -221,7 +221,7 @@ public abstract class InternetResourceProvisionerToFile extends
 
 
 	@Override
-	public abstract String getUrlAddress(String identificator);
+	public abstract String getUrlAddress(IndexType identificator);
 	public abstract String getTargetFileDir();
 
 	@Override

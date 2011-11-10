@@ -7,10 +7,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public abstract class FileSystemResourceProvisioner<T> implements ResourceProvisioner<T> {
+public abstract class FileSystemResourceProvisioner<T, IndexType> implements ResourceProvisioner<T, IndexType> {
 
 	@Override
-	public boolean setResource(String identificator, T targetResource) {
+	public boolean setResource(IndexType identificator, T targetResource) {
 		File file = new File(mCacheDir + identificator);
 		/*
 		if(file.exists())
@@ -39,7 +39,7 @@ public abstract class FileSystemResourceProvisioner<T> implements ResourceProvis
 
 	}
 	@Override
-	public T getResource(String identificator) {
+	public T getResource(IndexType identificator) {
 		File parent = new File(mCacheDir);
 		if(parent.exists() == false) {
 			//Log.d("hamibook2", "Attemp to create subdirectory :" + mCacheDir + " result : " + parent.mkdirs());
@@ -67,7 +67,7 @@ public abstract class FileSystemResourceProvisioner<T> implements ResourceProvis
 	}
 	
 	@Override
-	public boolean dereferenceResource(String identificator) {
+	public boolean dereferenceResource(IndexType identificator) {
 		//do nothing
 		return true;
 	}

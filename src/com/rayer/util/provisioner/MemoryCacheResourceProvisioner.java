@@ -4,15 +4,15 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
  
-public abstract class MemoryCacheResourceProvisioner<T> implements
-		ResourceProvisioner<T> {
-	HashMap<String, ResourceElement > mResourceMap = new HashMap<String, ResourceElement >();
+public abstract class MemoryCacheResourceProvisioner<T, IndexType> implements
+		ResourceProvisioner<T, IndexType> {
+	HashMap<IndexType, ResourceElement > mResourceMap = new HashMap<IndexType, ResourceElement >();
 	
 	public MemoryCacheResourceProvisioner() {
 	}
 
 	@Override
-	public T getResource(String identificator) {
+	public T getResource(IndexType identificator) {
 		ResourceElement target = mResourceMap.get(identificator);
 		if(target == null)
 			return null;
@@ -22,7 +22,7 @@ public abstract class MemoryCacheResourceProvisioner<T> implements
 	}
 
 	@Override
-	public boolean setResource(String identificator, T targetResource) {
+	public boolean setResource(IndexType identificator, T targetResource) {
 		ResourceElement target = mResourceMap.get(identificator);
 		if(target == null) {
 			target = new ResourceElement(targetResource);
@@ -33,7 +33,7 @@ public abstract class MemoryCacheResourceProvisioner<T> implements
 	}
 	
 	@Override
-	public boolean dereferenceResource(String identificator) {
+	public boolean dereferenceResource(IndexType identificator) {
 		ResourceElement target = mResourceMap.get(identificator);
 		if(target == null)
 			return false;
@@ -46,9 +46,9 @@ public abstract class MemoryCacheResourceProvisioner<T> implements
 	 * Clean up all rc = 0 object.
 	 */
 	public void refreshElement() {
-		Set<Entry<String, ResourceElement> > set = mResourceMap.entrySet();
+		Set<Entry<IndexType, ResourceElement> > set = mResourceMap.entrySet();
 		
-		for(Entry<String, ResourceElement> e : set) {
+		for(Entry<IndexType, ResourceElement> e : set) {
 			if(e.getValue().referenceCount <= 0)
 				destroyElement(e.getValue().object);
 			

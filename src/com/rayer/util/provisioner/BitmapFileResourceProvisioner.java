@@ -7,8 +7,8 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 
-public class BitmapFileResourceProvisioner extends
-		FileSystemResourceProvisioner<Bitmap> {
+public class BitmapFileResourceProvisioner<IndexType> extends
+		FileSystemResourceProvisioner<Bitmap, IndexType> {
 
 	public BitmapFileResourceProvisioner(String cacheDir) {
 		super(cacheDir);

@@ -15,14 +15,14 @@ import com.rayer.util.stream.PatchInputStream;
  *
  * @param <T>
  */
-public abstract class InternetResourceProvisioner<T> implements ResourceProvisioner<T> {
+public abstract class InternetResourceProvisioner<T, IndexType> implements ResourceProvisioner<T, IndexType> {
 
-	String mIdentificator;
+	IndexType mIdentificator;
 	//private Map<String, List<String>> mHeaderFields;
 	int mFileLength = 0;
 
 	@Override
-	public T getResource(String identificator) throws IOException {
+	public T getResource(IndexType identificator) throws IOException {
 		
 		mIdentificator = identificator;
 		//完全不用管cache的問題 來一次連一次就對了
@@ -57,12 +57,12 @@ public abstract class InternetResourceProvisioner<T> implements ResourceProvisio
 		return createStream();
 	}
 
-	public String getIdentificator() {
+	public IndexType getIdentificator() {
 		return mIdentificator;
 	}
 
 	@Override
-	public boolean setResource(String identificator, T targetResource) {
+	public boolean setResource(IndexType identificator, T targetResource) {
 		
 		return false;
 	}
@@ -78,7 +78,7 @@ public abstract class InternetResourceProvisioner<T> implements ResourceProvisio
 	 * @param indentificator
 	 * @return
 	 */
-	public abstract String getUrlAddress(String identificator);
+	public abstract String getUrlAddress(IndexType identificator);
 	
 	InputStream createStream() throws IOException {
 		URL url = null;
@@ -109,7 +109,7 @@ public abstract class InternetResourceProvisioner<T> implements ResourceProvisio
 	}
 	
 	@Override
-	public boolean dereferenceResource(String identificator) {
+	public boolean dereferenceResource(IndexType identificator) {
 		//do nothing
 		return true;
 	}
