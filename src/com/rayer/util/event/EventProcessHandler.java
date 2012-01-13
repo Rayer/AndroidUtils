@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 
 public abstract class EventProcessHandler extends Handler {
@@ -28,7 +27,7 @@ public abstract class EventProcessHandler extends Handler {
 //		if(targetEventArray.contains(targetClass) == false)
 //			targetEventArray.add(targetClass);
 		
-		Log.d("EventManager", "added monitor event");
+		//Log.d("EventManager", "added monitor event");
 		if(mMonitoringEventList.contains(targetClass))
 			return;
 		
