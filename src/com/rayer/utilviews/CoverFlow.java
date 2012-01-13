@@ -139,14 +139,14 @@ public class CoverFlow extends Gallery {
 		t.setTransformationType(Transformation.TYPE_MATRIX);
 
 		if (childCenter == mCoveflowCenter) {
-			transformImageBitmap((ImageView) child, t, 0);
+			transformImageBitmap(child, t, 0);
 		} else {
 			rotationAngle = (int) (((float) (mCoveflowCenter - childCenter) / childWidth) * mMaxRotationAngle);
 			if (Math.abs(rotationAngle) > mMaxRotationAngle) {
 				rotationAngle = (rotationAngle < 0) ? -mMaxRotationAngle
 						: mMaxRotationAngle;
 			}
-			transformImageBitmap((ImageView) child, t, rotationAngle);
+			transformImageBitmap(child, t, rotationAngle);
 		}
 
 		return true;
@@ -181,7 +181,7 @@ public class CoverFlow extends Gallery {
 	 * @param rotationAngle
 	 *            the Angle by which to rotate the Bitmap
 	 */
-	private void transformImageBitmap(ImageView child, Transformation t,
+	private void transformImageBitmap(View child, Transformation t,
 			int rotationAngle) {
 		mCamera.save();
 		final Matrix imageMatrix = t.getMatrix();
