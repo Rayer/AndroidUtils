@@ -6,11 +6,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import org.json.JSONTokener;
 
 public class StringUtil {
 
@@ -43,9 +46,17 @@ public class StringUtil {
 	 */
 	@Deprecated
 	public static void stringToFile(String filePath, String content) {
-
+		stringToFile(new File(filePath), content);
+	}
+	
+	/**
+	 * @deprecated
+	 * @param filePath
+	 * @param content
+	 */
+	public static void stringToFile(File file, String content) {
 		try {
-			FileOutputStream fout = new FileOutputStream(filePath);
+			FileOutputStream fout = new FileOutputStream(file);
 			DataOutputStream dataout = new DataOutputStream(fout);
 			byte[] data1 = content.getBytes("UTF-8");
 			dataout.write(data1);
@@ -58,10 +69,9 @@ public class StringUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
-
 	}
 	
-	public static String fromFile(String path) {
+	public static String fromFile(String path) throws IOException {
 		File file = new File(path);
 		if(file.exists() == false)
 			return null;
@@ -69,24 +79,24 @@ public class StringUtil {
 		return fromFile(file);
 	}
 
-	public static String fromFile(File file) {
-		StringBuilder stringBuilder = new StringBuilder();
+	public static String fromFile(File file) throws IOException {
 		
-		try {
+		
+		return fromStream(new FileInputStream(file));
+	}
+	
 
-			FileInputStream fis = new FileInputStream(file);
+	public static String fromStream(InputStream fis) throws IOException {
+		
+		StringBuilder stringBuilder = new StringBuilder();
+
 			Reader in = new InputStreamReader(fis, "UTF-8");
 			int ch;
 			while ((ch = in.read()) > -1) {
 				stringBuilder.append((char)ch);
 			}
 			in.close();
-
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		return stringBuilder.toString();
+			return null;
 	}
 	
 	public static String asHex (byte buf[]) 
@@ -125,6 +135,8 @@ public class StringUtil {
 		}
 		return res;
 	}
+
+
 	
 
 }
