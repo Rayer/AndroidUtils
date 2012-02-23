@@ -7,13 +7,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.json.JSONTokener;
+import com.rayer.util.stream.StreamUtil;
 
 public class StringUtil {
 
@@ -43,9 +40,11 @@ public class StringUtil {
 	 * @deprecated
 	 * @param filePath
 	 * @param content
+	 * @throws IOException 
+	 * @throws  
 	 */
 	@Deprecated
-	public static void stringToFile(String filePath, String content) {
+	public static void stringToFile(String filePath, String content) throws IOException {
 		stringToFile(new File(filePath), content);
 	}
 	
@@ -53,22 +52,20 @@ public class StringUtil {
 	 * @deprecated
 	 * @param filePath
 	 * @param content
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
 	 */
-	public static void stringToFile(File file, String content) {
-		try {
-			FileOutputStream fout = new FileOutputStream(file);
-			DataOutputStream dataout = new DataOutputStream(fout);
-			byte[] data1 = content.getBytes("UTF-8");
-			dataout.write(data1);
-			fout.flush();
-			fout.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
+	public static void stringToFile(File file, String content) throws FileNotFoundException, IOException {
+		stringToStream(content, new FileOutputStream(file));
+	}
+	
+	public static void stringToStream(String content, FileOutputStream fout) throws IOException {
+		DataOutputStream dataout = new DataOutputStream(fout);
+		byte[] data1 = content.getBytes("UTF-8");
+		dataout.write(data1);
+		fout.flush();
+		fout.close();
+
 	}
 	
 	public static String fromFile(String path) throws IOException {
@@ -80,23 +77,12 @@ public class StringUtil {
 	}
 
 	public static String fromFile(File file) throws IOException {
-		
-		
 		return fromStream(new FileInputStream(file));
 	}
 	
 
 	public static String fromStream(InputStream fis) throws IOException {
-		
-		StringBuilder stringBuilder = new StringBuilder();
-
-			Reader in = new InputStreamReader(fis, "UTF-8");
-			int ch;
-			while ((ch = in.read()) > -1) {
-				stringBuilder.append((char)ch);
-			}
-			in.close();
-			return null;
+		return StreamUtil.InputStreamToString(fis);
 	}
 	
 	public static String asHex (byte buf[]) 
@@ -135,6 +121,8 @@ public class StringUtil {
 		}
 		return res;
 	}
+
+
 
 
 	
