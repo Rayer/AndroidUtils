@@ -6,9 +6,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
+import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import com.rayer.util.stream.StreamUtil;
 
 public class StringUtil {
 
@@ -38,28 +40,35 @@ public class StringUtil {
 	 * @deprecated
 	 * @param filePath
 	 * @param content
+	 * @throws IOException 
+	 * @throws  
 	 */
 	@Deprecated
-	public static void stringToFile(String filePath, String content) {
-
-		try {
-			FileOutputStream fout = new FileOutputStream(filePath);
-			DataOutputStream dataout = new DataOutputStream(fout);
-			byte[] data1 = content.getBytes("UTF-8");
-			dataout.write(data1);
-			fout.flush();
-			fout.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
+	public static void stringToFile(String filePath, String content) throws IOException {
+		stringToFile(new File(filePath), content);
+	}
+	
+	/**
+	 * @deprecated
+	 * @param filePath
+	 * @param content
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 */
+	public static void stringToFile(File file, String content) throws FileNotFoundException, IOException {
+		stringToStream(content, new FileOutputStream(file));
+	}
+	
+	public static void stringToStream(String content, FileOutputStream fout) throws IOException {
+		DataOutputStream dataout = new DataOutputStream(fout);
+		byte[] data1 = content.getBytes("UTF-8");
+		dataout.write(data1);
+		fout.flush();
+		fout.close();
 
 	}
 	
-	public static String fromFile(String path) {
+	public static String fromFile(String path) throws IOException {
 		File file = new File(path);
 		if(file.exists() == false)
 			return null;
@@ -67,24 +76,13 @@ public class StringUtil {
 		return fromFile(file);
 	}
 
-	public static String fromFile(File file) {
-		StringBuilder stringBuilder = new StringBuilder();
-		
-		try {
+	public static String fromFile(File file) throws IOException {
+		return fromStream(new FileInputStream(file));
+	}
+	
 
-			FileInputStream fis = new FileInputStream(file);
-			Reader in = new InputStreamReader(fis, "UTF-8");
-			int ch;
-			while ((ch = in.read()) > -1) {
-				stringBuilder.append((char)ch);
-			}
-			in.close();
-
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		return stringBuilder.toString();
+	public static String fromStream(InputStream fis) throws IOException {
+		return StreamUtil.InputStreamToString(fis);
 	}
 	
 	public static String asHex (byte buf[]) 
@@ -102,6 +100,31 @@ public class StringUtil {
 
 	      return strbuf.toString();
 	}
+	
+	public static String getMD5(String input) {
+		String res = "";
+		try {
+			MessageDigest algorithm = MessageDigest.getInstance("MD5");
+			algorithm.reset();
+			algorithm.update(input.getBytes());
+			byte[] md5 = algorithm.digest();
+			String tmp = "";
+			for (int i = 0; i < md5.length; i++) {
+				tmp = (Integer.toHexString(0xFF & md5[i]));
+				if (tmp.length() == 1) {
+					res += "0" + tmp;
+				} else {
+					res += tmp;
+				}
+			}
+		} catch (NoSuchAlgorithmException ex) {
+		}
+		return res;
+	}
+
+
+
+
 	
 
 }

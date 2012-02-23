@@ -12,9 +12,9 @@ import android.util.Log;
 public abstract class InternetResourceProvisionerToFile<IndexType> extends
 		InternetResourceProvisioner<File, IndexType> {
 	
-	static public boolean DEBUG_MODE = true;
+	static public boolean DEBUG_MODE = false;
 	static public String DEBUG_MODEL_NAME = "InternetResourceProvisionerToFile";
-	static public String DEBUG_TAG = "hamibook2";
+	static public String DEBUG_TAG = "RAYER_UTILS";
 	static public void logD(String message){
 		if(DEBUG_MODE == false)
 			return;
@@ -144,7 +144,7 @@ public abstract class InternetResourceProvisionerToFile<IndexType> extends
 			ret = new File(getTargetFileDir() + "/" + getIdentificator());
 			if(ret.exists())
 				ret.delete();
-			
+			ret.getParentFile().mkdirs();
 			FileOutputStream targetFos = new FileOutputStream(ret);
 			byte[] buf = new byte[8192];
 			int len;
