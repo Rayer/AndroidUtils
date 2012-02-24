@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>andorid_utils</artifactId>
   <version>1.0.0</version>
-  <name>Utilities</name>
+  <name>Android_Utils</name>
   <build>
   	  <defaultGoal>compile</defaultGoal>
   	  <plugins>
